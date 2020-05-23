@@ -7,11 +7,15 @@ Binds a PTY to a TCP port on the host it is ran on.
 """
 import os
 import pty
+import sys
 import socket
 
-lport = 31337 # XXX: CHANGEME
-
 def main():
+    if len(sys.argv) < 2:
+      print("Usage:\n  " + sys.argv[0] + " <port>\n")
+      exit(1)
+
+    lport = int(sys.argv[1])
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.bind(('', lport))
     s.listen(1)

